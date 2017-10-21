@@ -1,0 +1,8 @@
+## Interface: 11200
+## Title: TopMeOff
+## Notes: Automatically tops off reagent stacks when you talk to a reagent vendor.
+## Author: Bergador
+## Version: 1.0
+## Dependencies:
+TopMeOff.lua
+TopMeOff.xml
