@@ -16,7 +16,6 @@ local reagents = {{"Sacred Candle", 20},
 				  {"Stranglethorn Seed", 20},
 				  {"Ashwood Seed", 20},
 				  {"Hornbeam Seed", 20},
-				  {"Ironwood Seed", 20},
 				  {"Symbol of Kings", 100}}
 
 function TopMeOff_OnLoad()		
