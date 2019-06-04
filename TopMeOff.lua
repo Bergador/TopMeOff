@@ -1,34 +1,67 @@
-local reagents = {{"Sacred Candle", 20},
-				  {"Wild Thornroot", 20},
-				  {"Ironwood Seed", 20},
-				  {"Combat Mana Potion", 5},
-				  {"Combat Healing Potion", 5},
-				  {"Infernal Stone", 5},
-				  {"Demonic Figure", 5},
-				  {"Arcane Powder", 20},
-				  {"Wild Berries", 20},
-				  {"Holy Candle", 20},
-				  {"Ankh", 5},
-				  {"Rune of Teleportation", 10},
-				  {"Rune of Portals", 10},
-				  {"Symbol of Divinity", 5},
-				  {"Maple Seed", 20},
-				  {"Stranglethorn Seed", 20},
-				  {"Ashwood Seed", 20},
-				  {"Hornbeam Seed", 20},
-				  {"Symbol of Kings", 100}}
+local reagents = {}
 
-function TopMeOff_OnLoad()		
-	this:RegisterEvent("MERCHANT_SHOW");
-end
-
-function TopMeOff_OnEvent()
-	if( event == "MERCHANT_SHOW" ) then
-		BuyReagents();
+local function GetBagItemNameAndCount(bag, item)
+	for i = 1, 29, 1 do
+		getglobal("TopMeOffTooltipTextLeft" .. i):SetText("");
+	end
+
+	TopMeOffTooltip:SetBagItem(bag, item);
+	
+	local text = getglobal("TopMeOffTooltipTextLeft1")
+	
+	local _, itemCount = GetContainerItemInfo(bag, item);
+	
+	if text ~= nil then
+		return text:GetText(), itemCount;
+	else
+		return "", itemCount;
 	end
 end
 
-function BuyReagents()
+function TopMeOff_OnLoad()		
+	this:RegisterEvent("MERCHANT_SHOW");
+	this:RegisterEvent("PLAYER_LOGIN");
+end
+
+function TopMeOff_OnEvent()
+	if( event == "MERCHANT_SHOW" ) then
+		TopMeOff_BuyReagents();
+	elseif( event == "PLAYER_LOGIN" ) then
+		TopMeOff_SetClassReagents();
+	end
+end
+
+function TopMeOff_SetClassReagents()
+	local _, class = UnitClass("player");
+	if(class == "ROGUE") then
+		reagents = {{"Flash Powder", 20}}
+	elseif(class == "PRIEST") then
+		reagents = {{"Sacred Candle", 20},
+					{"Holy Candle", 20}}
+	elseif(class == "DRUID") then
+		reagents = {{"Wild Thornroot", 20},
+					{"Ironwood Seed", 20},
+					{"Wild Berries", 20},
+					{"Maple Seed", 20},
+					{"Stranglethorn Seed", 20},
+					{"Ashwood Seed", 20},
+					{"Hornbeam Seed", 20}}
+	elseif(class == "WARLOCK") then
+		reagents = {{"Infernal Stone", 5},
+					{"Demonic Figure", 5}}
+	elseif(class == "MAGE") then
+		reagents = {{"Arcane Powder", 20},
+					{"Rune of Teleportation", 10},
+					{"Rune of Portals", 10}}
+	elseif(class == "SHAMAN") then
+		reagents = {{"Ankh", 5}}
+	elseif(class == "PALADIN") then
+		reagents = {{"Symbol of Divinity", 5},
+					{"Symbol of Kings", 100}}
+	end
+end
+
+function TopMeOff_BuyReagents()
 	local shoppingList = {};
 	
 	for i = 1, table.getn(reagents) do
@@ -74,20 +107,3 @@ function BuyReagents()
 	end	
 end
 
-function GetBagItemNameAndCount(bag, item)
-	for i = 1, 29, 1 do
-		getglobal("TopMeOffTooltipTextLeft" .. i):SetText("");
-	end
-
-	TopMeOffTooltip:SetBagItem(bag, item);
-	
-	local text = getglobal("TopMeOffTooltipTextLeft1")
-	
-	local _, itemCount = GetContainerItemInfo(bag, item);
-	
-	if text ~= nil then
-		return text:GetText(), itemCount;
-	else
-		return "", itemCount;
-	end
-end
